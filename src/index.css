@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Chief Motors palette */
+  --color-obsidian: #0b0b0c;
+  --color-graphite: #1a1b1e;
+  --color-graphite-light: #232428;
+  --color-bone: #f6f5f2;
+  --color-silver: #9ca0a8;
+  --color-silver-dim: #5c5f66;
+  --color-racing-red: #d91c2b;
+  --color-racing-red-dim: #a3151f;
+  --color-amber: #c6992f;
+  --color-amber-dim: #a17e28;
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-obsidian);
+  color: var(--color-bone);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--color-racing-red);
+  color: var(--color-bone);
+}
+
+.spec-strip {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* Chamfered corner — automotive panel cue instead of rounded-pill buttons */
+.clip-corner {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-obsidian);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-graphite-light);
+  border: 2px solid var(--color-obsidian);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-silver-dim);
+}
