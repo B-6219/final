@@ -17,6 +17,7 @@ import Cart from '@/pages/Cart'
 import Wishlist from '@/pages/Wishlist'
 import Checkout from '@/pages/Checkout'
 import Dashboard from '@/pages/Dashboard'
+import Profile from '@/pages/Profile'
 import AdminDashboard from '@/pages/AdminDashboard'
 import NotFound from '@/pages/NotFound'
 
@@ -41,6 +42,7 @@ function App() {
         <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
         <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
         <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFound />} />

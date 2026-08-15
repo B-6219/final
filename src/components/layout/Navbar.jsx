@@ -4,10 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiMenu, FiX, FiSearch, FiHeart, FiShoppingCart, FiUser } from 'react-icons/fi'
 import { MAIN_NAV } from '@/constants/navigation'
 import { cn } from '@/lib/utils'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { isSignedIn, convexUser } = useCurrentUser()
+
+  // Signed-out -> sign in. Signed-in admin -> straight to the admin
+  // dashboard. Everyone else -> their profile page.
+  const accountTarget = !isSignedIn ? '/sign-in' : convexUser?.role === 'admin' ? '/admin' : '/profile'
+  const accountLabel = !isSignedIn ? 'Sign in' : convexUser?.role === 'admin' ? 'Admin dashboard' : 'My profile'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -58,7 +65,7 @@ export default function Navbar() {
           <NavLink to="/cart" aria-label="Cart" className="hover:text-racing-red transition-colors">
             <FiShoppingCart size={20} />
           </NavLink>
-          <NavLink to="/sign-in" aria-label="Account" className="hover:text-racing-red transition-colors">
+          <NavLink to={accountTarget} aria-label={accountLabel} className="hover:text-racing-red transition-colors">
             <FiUser size={20} />
           </NavLink>
         </div>
@@ -98,7 +105,7 @@ export default function Navbar() {
               <li className="flex gap-6 pt-4 border-t border-graphite-light text-bone">
                 <NavLink to="/wishlist" onClick={() => setOpen(false)}><FiHeart size={22} /></NavLink>
                 <NavLink to="/cart" onClick={() => setOpen(false)}><FiShoppingCart size={22} /></NavLink>
-                <NavLink to="/sign-in" onClick={() => setOpen(false)}><FiUser size={22} /></NavLink>
+                <NavLink to={accountTarget} onClick={() => setOpen(false)}><FiUser size={22} /></NavLink>
               </li>
             </ul>
           </motion.div>

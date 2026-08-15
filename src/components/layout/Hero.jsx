@@ -1,17 +1,44 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiSearch } from 'react-icons/fi'
 import Button from '@/components/ui/Button'
 
+const POSTER = 'https://assets.mixkit.co/videos/24481/24481-thumb-720-3.jpg'
+
+// Swap this for your own licensed footage before going to production —
+// this is a Mixkit sample used for prototyping the layout.
+const VIDEO_SRC = 'https://assets.mixkit.co/videos/24481/24481-720.mp4'
+
+
 export default function Hero() {
+  const [videoFailed, setVideoFailed] = useState(false)
+  const prefersReducedMotion =
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
   return (
     <section className="relative h-[92vh] min-h-[640px] flex items-end overflow-hidden">
-      {/* Background image */}
+      {/* Background video */}
       <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2000&auto=format&fit=crop"
-          alt="Premium vehicle showcased in studio lighting"
-          className="w-full h-full object-cover"
-        />
+        {!videoFailed && !prefersReducedMotion ? (
+          <video
+            className="w-full h-full object-cover"
+            poster={POSTER}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onError={() => setVideoFailed(true)}
+          >
+            <source src={VIDEO_SRC} type="video/mp4" />
+          </video>
+        ) : (
+          <img
+            src={POSTER}
+            alt="Premium vehicle showcased in studio lighting"
+            className="w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-obsidian/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-obsidian/70 via-transparent to-transparent" />
       </div>

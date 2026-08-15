@@ -26,6 +26,7 @@ dist-ssr
 # Environment variables (contains real API keys — never commit)
 .env.local
 .env.*.local
+.env.example
 
 # Convex local dev
 .convex
