@@ -7,7 +7,9 @@ const POSTER = 'https://assets.mixkit.co/videos/24481/24481-thumb-720-3.jpg'
 
 // Swap this for your own licensed footage before going to production —
 // this is a Mixkit sample used for prototyping the layout.
-const VIDEO_SRC = 'https://assets.mixkit.co/videos/24481/24481-720.mp4'
+//const VIDEO_SRC = 'https://assets.mixkit.co/videos/24481/24481-720.mp4'
+
+const VIDEO_SRC = '/videos/back.mp4'
 
 
 export default function Hero() {
