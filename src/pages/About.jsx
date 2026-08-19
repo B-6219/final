@@ -28,7 +28,7 @@ export default function About() {
             Built by people who actually love cars.
           </h1>
           <p className="text-silver mt-6 leading-relaxed">
-            Chief Motors started with a simple frustration: buying a premium vehicle online meant
+            alhusnain Motors started with a simple frustration: buying a premium vehicle online meant
             trusting photos and a spec sheet, and nothing else. We built the marketplace we wished
             existed — every vehicle inspected in person, every listing backed by a real advisor,
             every delivery tracked door to door.

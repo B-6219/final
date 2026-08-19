@@ -62,7 +62,7 @@ export default function VehicleDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
           {/* Gallery */}
           <div>
-            <div className="aspect-[4/3] overflow-hidden bg-graphite border border-graphite-light mb-3">
+            <div className="aspect-4/3 overflow-hidden bg-graphite border border-graphite-light mb-3">
               <img src={gallery[activeImage]} alt={vehicle.model} className="w-full h-full object-cover" />
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -70,7 +70,7 @@ export default function VehicleDetails() {
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`aspect-[4/3] overflow-hidden border ${i === activeImage ? 'border-amber' : 'border-graphite-light'}`}
+                  className={`aspect-4/3 overflow-hidden border ${i === activeImage ? 'border-amber' : 'border-graphite-light'}`}
                 >
                   <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
@@ -138,9 +138,9 @@ export default function VehicleDetails() {
 
             {/* Dealer info */}
             <div className="mt-8 border border-graphite-light p-5 flex items-center gap-4">
-              <Avatar name={vehicle.dealerName || 'Chief Motors Nairobi'} size={44} />
+              <Avatar name={vehicle.dealerName || 'alhusnain Motors Nairobi'} size={44} />
               <div className="flex-1">
-                <p className="text-bone text-sm font-medium">{vehicle.dealerName || 'Chief Motors Nairobi'}</p>
+                <p className="text-bone text-sm font-medium">{vehicle.dealerName || 'alhusnain Motors Nairobi'}</p>
                 <p className="text-silver-dim text-xs flex items-center gap-1 mt-0.5">
                   <FiMapPin size={12} /> {vehicle.dealerLocation || 'Westlands, Nairobi'}
                 </p>

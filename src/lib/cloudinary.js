@@ -11,7 +11,7 @@ export const isCloudinaryConfigured = Boolean(CLOUD_NAME && UPLOAD_PRESET)
  *
  * Returns the secure_url on success, or throws with a readable message.
  */
-export async function uploadImage(file, { folder = 'chief-motors/vehicles' } = {}) {
+export async function uploadImage(file, { folder = 'alhusnain-motors/vehicles' } = {}) {
   if (!isCloudinaryConfigured) {
     throw new Error(
       'Cloudinary is not configured — add VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET to .env.local'

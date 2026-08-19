@@ -18,7 +18,7 @@ export default function Hero() {
     typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   return (
-    <section className="relative h-[92vh] min-h-[640px] flex items-end overflow-hidden">
+    <section className="relative h-[92vh] min-h-160 flex items-end overflow-hidden">
       {/* Background video */}
       <div className="absolute inset-0">
         {!videoFailed && !prefersReducedMotion ? (
@@ -41,8 +41,8 @@ export default function Hero() {
             className="w-full h-full object-cover"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-obsidian/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-obsidian via-obsidian/60 to-obsidian/20" />
+        <div className="absolute inset-0 bg-linear-to-r from-obsidian/70 via-transparent to-transparent" />
       </div>
 
       <div className="relative mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20">
@@ -81,7 +81,6 @@ export default function Hero() {
           className="mt-10 flex flex-col sm:flex-row gap-4"
         >
           <Button size="lg" icon={FiSearch}>Browse Inventory</Button>
-          <Button size="lg" variant="outline">Sell Your Car</Button>
         </motion.div>
 
         {/* Search bar */}

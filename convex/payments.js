@@ -131,7 +131,7 @@ export const initiateMpesaStkPush = action({
         PhoneNumber: phone,
         CallBackURL: callbackUrl,
         AccountReference: orderId,
-        TransactionDesc: `Chief Motors order ${orderId}`,
+        TransactionDesc: `alhusnain Motors order ${orderId}`,
       }),
     })
 

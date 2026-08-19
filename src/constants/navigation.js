@@ -9,7 +9,7 @@ export const MAIN_NAV = [
 
 export const FOOTER_LINKS = {
   company: [
-    { label: 'About Chief Motors', to: '/about' },
+    { label: 'About alhusnain Motors', to: '/about' },
     { label: 'Contact', to: '/contact' },
     { label: 'Careers', to: '/careers' },
   ],

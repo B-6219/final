@@ -8,7 +8,7 @@ import { useToast } from '@/context/ToastContext'
 const CONTACT_INFO = [
   { icon: FiMapPin, label: 'Showroom', value: 'Westlands, Nairobi, Kenya' },
   { icon: FiPhone, label: 'Phone', value: '+254 700 000 000' },
-  { icon: FiMail, label: 'Email', value: 'hello@chiefmotors.co.ke' },
+  { icon: FiMail, label: 'Email', value: 'hello@alhusnainmotors.co.ke' },
   { icon: FiClock, label: 'Hours', value: 'Mon – Sat, 9am – 6pm' },
 ]
 

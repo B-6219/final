@@ -1,4 +1,4 @@
-# Chief Motors — Premium Car E-Commerce Platform
+# alhusnain Motors — Premium Car E-Commerce Platform
 
 ## Phase 1 of N: Project Foundation ✅
 

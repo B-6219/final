@@ -25,7 +25,7 @@ export default function Cart() {
   const total = subtotal + tax + shipping - discount
 
   const applyCoupon = () => {
-    if (coupon.trim().toUpperCase() === 'CHIEF10') {
+    if (coupon.trim().toUpperCase() === 'alhusnain10') {
       setDiscount(subtotal * 0.1)
       showToast('Coupon applied — 10% off', 'success')
     } else {
@@ -92,7 +92,7 @@ export default function Cart() {
               <input
                 value={coupon}
                 onChange={(e) => setCoupon(e.target.value)}
-                placeholder="Discount code (try CHIEF10)"
+                placeholder="Discount code (try alhusnain10)"
                 className="flex-1 bg-obsidian border border-graphite-light px-3 py-2 text-sm text-bone placeholder:text-silver-dim focus:outline-none focus:border-amber"
               />
               <Button size="sm" variant="outline" onClick={applyCoupon}>Apply</Button>

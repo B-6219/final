@@ -7,7 +7,7 @@ const FAQS = [
   { q: 'Can I return a vehicle after purchase?', a: 'Yes — you have 7 days or 500 km (whichever comes first) to return a vehicle for a full refund if it doesn\u2019t meet expectations.' },
   { q: 'What payment methods do you accept?', a: 'We support card payments via Stripe and mobile money via M-Pesa. Financing options are available at checkout for qualifying vehicles.' },
   { q: 'Do you deliver nationwide?', a: 'Yes, we deliver to all major cities and most rural areas. Delivery timelines and costs are calculated at checkout based on your address.' },
-  { q: 'How do I sell my car through Chief Motors?', a: 'Use the "Sell Your Car" button on the homepage to submit your vehicle details. Our team will schedule an inspection and provide a valuation within 48 hours.' },
+  { q: 'How do I sell my car through alhusnain Motors?', a: 'Use the "Sell Your Car" button on the homepage to submit your vehicle details. Our team will schedule an inspection and provide a valuation within 48 hours.' },
   { q: 'Is financing available?', a: 'Financing is available on select vehicles through our lending partners. Eligibility and rates are shown on the vehicle details page before checkout.' },
 ]
 

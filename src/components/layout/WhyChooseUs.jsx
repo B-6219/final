@@ -12,7 +12,7 @@ export default function WhyChooseUs() {
   return (
     <section className="bg-graphite border-y border-graphite-light">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-24">
-        <p className="spec-strip text-racing-red text-xs uppercase tracking-[0.3em] mb-2">03 — Why Chief Motors</p>
+        <p className="spec-strip text-racing-red text-xs uppercase tracking-[0.3em] mb-2">03 — Why alhusnain Motors</p>
         <h2 className="font-display text-bone text-4xl lg:text-5xl uppercase mb-12">Built On Trust</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

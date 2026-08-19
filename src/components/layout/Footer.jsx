@@ -34,7 +34,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-14 grid grid-cols-2 lg:grid-cols-5 gap-10">
         <div className="col-span-2">
           <p className="font-display text-2xl tracking-widest text-bone">
-            CHIEF <span className="text-racing-red">MOTORS</span>
+            alhusnain <span className="text-racing-red">MOTORS</span>
           </p>
           <p className="text-silver text-sm mt-4 max-w-xs">
             A premium marketplace for buying and selling vehicles, built on trust,
@@ -54,7 +54,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-graphite-light py-6 text-center text-xs text-silver-dim">
-        © {new Date().getFullYear()} Chief Motors. All rights reserved.
+        © {new Date().getFullYear()} alhusnain Motors. All rights reserved.
       </div>
     </footer>
   )

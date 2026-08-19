@@ -32,7 +32,7 @@ export default function Navbar() {
       <nav className="mx-auto max-w-7xl px-6 lg:px-10 flex items-center justify-between h-20">
         {/* Logo */}
         <NavLink to="/" className="font-display text-2xl tracking-widest text-bone">
-          CHIEF <span className="text-racing-red">MOTORS</span>
+          alhusnain <span className="text-racing-red">MOTORS</span>
         </NavLink>
 
         {/* Desktop links */}

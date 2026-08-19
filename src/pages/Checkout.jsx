@@ -260,7 +260,7 @@ export default function Checkout() {
               Order <span className="text-amber spec-strip">#{orderId}</span> has been placed.
             </p>
             <p className="text-silver text-sm mb-6">
-              A confirmation has been sent, and Chief Motors will be in touch to arrange delivery.
+              A confirmation has been sent, and alhusnain Motors will be in touch to arrange delivery.
             </p>
 
             {paymentNote && (
