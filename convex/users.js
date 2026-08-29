@@ -39,6 +39,17 @@ export const getByClerkId = query({
     ctx.db.query('users').withIndex('by_clerkId', (q) => q.eq('clerkId', args.clerkId)).unique(),
 })
 
+// Name/email/avatar are owned by Clerk (synced via upsertFromClerk on
+// every sign-in) — this covers the fields Convex owns instead, currently
+// just phone. Extend the args/patch here if you add more profile-only
+// fields to the schema later.
+export const updateProfile = mutation({
+  args: { id: v.id('users'), phone: v.optional(v.string()) },
+  handler: async (ctx, { id, ...patch }) => {
+    await ctx.db.patch(id, { ...patch, updatedAt: Date.now() })
+  },
+})
+
 // ── Admin: customer management ─────────────────────────────────────────────
 
 export const list = query({

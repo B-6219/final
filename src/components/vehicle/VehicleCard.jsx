@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
-import { FiHeart, FiShoppingCart, FiShuffle, FiStar } from 'react-icons/fi'
+import { FiHeart, FiShuffle, FiStar } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import Badge from '@/components/ui/Badge'
-import { formatPrice, formatMileage, cn } from '@/lib/utils'
-import { useCart } from '@/hooks/useCart'
+import { formatMileage, cn } from '@/lib/utils'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useWishlist } from '@/hooks/useWishlist'
 import { useToast } from '@/context/ToastContext'
 
@@ -11,10 +12,12 @@ import { useToast } from '@/context/ToastContext'
  * Signature component: styled like an automotive window sticker.
  * The spec-strip (mono font, uppercase, divided cells) is the
  * one distinctive, memorable element of the catalog UI.
+ *
+ * No pricing is ever shown — every listing routes to WhatsApp instead,
+ * matching how the dealership actually sells.
  */
 export default function VehicleCard({ vehicle }) {
-  const { id, brand, model, year, mileage, fuel, transmission, price, image, featured, rating } = vehicle
-  const { addItem } = useCart()
+  const { id, brand, model, year, mileage, fuel, transmission, image, featured, rating } = vehicle
   const { has, toggle } = useWishlist()
   const { showToast } = useToast()
   const wishlisted = has(id)
@@ -75,16 +78,14 @@ export default function VehicleCard({ vehicle }) {
           <span className="pl-2 truncate">{transmission}</span>
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
-          <p className="font-display text-2xl text-bone">{formatPrice(price)}</p>
-          <button
-            aria-label="Add to cart"
-            onClick={() => { addItem(id); showToast('Added to cart', 'success') }}
-            className="p-2.5 bg-racing-red text-bone hover:bg-racing-red-dim transition-colors"
-          >
-            <FiShoppingCart size={16} />
-          </button>
-        </div>
+        <a
+          href={buildWhatsAppLink(vehicle)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 flex items-center justify-center gap-2 bg-[#25D366] text-obsidian font-display uppercase text-sm tracking-wide py-2.5 hover:bg-[#1ebe5a] transition-colors"
+        >
+          <FaWhatsapp size={17} /> Enquire on WhatsApp
+        </a>
       </div>
     </motion.article>
   )

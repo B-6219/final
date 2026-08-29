@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { useClerk } from '@clerk/clerk-react'
 import { useMutation } from 'convex/react'
 import {
-  FiEdit2, FiShield, FiPackage, FiHeart, FiShoppingCart, FiMapPin,
+  FiEdit2, FiShield, FiPackage, FiHeart, FiMapPin,
   FiLogOut, FiTrash2, FiCheckCircle, FiSettings, FiArrowRight, FiAward,
 } from 'react-icons/fi'
 import { Breadcrumbs, Avatar, EmptyState } from '@/components/ui/States'
@@ -12,12 +12,10 @@ import Badge from '@/components/ui/Badge'
 import Modal from '@/components/ui/Modal'
 import Input from '@/components/ui/Input'
 import OrderCard from '@/components/ui/OrderCard'
-import { formatPrice } from '@/lib/utils'
 import { useToast } from '@/context/ToastContext'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { useUserOrders } from '@/hooks/useOrders'
 import { useWishlist } from '@/hooks/useWishlist'
-import { useCart } from '@/hooks/useCart'
 import { useAddresses } from '@/hooks/useAddresses'
 import { api } from '../../convex/_generated/api'
 import { convex } from '@/lib/convexClient'
@@ -25,7 +23,7 @@ import { convex } from '@/lib/convexClient'
 /**
  * The account hub — this is where the navbar's person icon lands for a
  * signed-in customer (admins go straight to /admin instead). Pulls
- * together identity (Clerk), and orders/wishlist/cart/addresses (Convex,
+ * together identity (Clerk), and orders/wishlist/addresses (Convex,
  * with mock fallback) into one page, with quick links out to the fuller
  * management views on /dashboard and Clerk's own security portal.
  */
@@ -35,7 +33,6 @@ export default function Profile() {
   const { openUserProfile, signOut } = useClerk()
   const { orders } = useUserOrders()
   const { items: wishlistItems } = useWishlist()
-  const { items: cartItems } = useCart()
   const { addresses } = useAddresses()
   const updatePhoneMut = convex ? useMutation(api.users.updateProfile) : null
 
@@ -49,7 +46,6 @@ export default function Profile() {
 
   const isAdmin = convexUser?.role === 'admin'
   const memberSince = convexUser?.createdAt ?? clerkUser?.createdAt
-  const activeCartCount = cartItems.filter((i) => !i.savedForLater).length
 
   const saveProfile = async (e) => {
     e.preventDefault()
@@ -113,10 +109,9 @@ export default function Profile() {
         )}
 
         {/* Quick stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
           <StatLink to="/dashboard/orders" icon={FiPackage} label="Orders" value={orders.length} />
           <StatLink to="/wishlist" icon={FiHeart} label="Wishlist" value={wishlistItems.length} />
-          <StatLink to="/cart" icon={FiShoppingCart} label="In Cart" value={activeCartCount} />
           <StatLink to="/dashboard/addresses" icon={FiMapPin} label="Addresses" value={addresses.length} />
         </div>
 
@@ -185,7 +180,7 @@ export default function Profile() {
             action={<NavLink to="/dashboard/addresses" className="text-xs text-silver hover:text-bone uppercase tracking-wide flex items-center gap-1">Manage <FiArrowRight size={12} /></NavLink>}
           >
             {addresses.length === 0 ? (
-              <EmptyState icon={FiMapPin} title="No addresses saved" message="Add one at checkout or from your dashboard." />
+              <EmptyState icon={FiMapPin} title="No addresses saved" message="Add one from your dashboard so it's ready when needed." />
             ) : (
               <div className="flex flex-col gap-3">
                 {addresses.slice(0, 2).map((a) => (

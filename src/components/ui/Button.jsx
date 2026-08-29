@@ -15,7 +15,7 @@ const SIZES = {
 }
 
 /**
- * alhusnain Motors button — sharp corners (chamfered, not rounded) to read
+ * Al-Husnain Motors button — sharp corners (chamfered, not rounded) to read
  * automotive rather than generic SaaS. Use `as="a"` semantics via onClick + href pass-through.
  */
 export default function Button({

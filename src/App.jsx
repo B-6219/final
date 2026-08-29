@@ -4,6 +4,8 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import Home from '@/pages/Home'
 import Shop from '@/pages/Shop'
 import VehicleDetails from '@/pages/VehicleDetails'
+import BikesShop from '@/pages/BikesShop'
+import BikeDetails from '@/pages/BikeDetails'
 import Categories from '@/pages/Categories'
 import Brands from '@/pages/Brands'
 import About from '@/pages/About'
@@ -13,9 +15,7 @@ import Privacy from '@/pages/Privacy'
 import Terms from '@/pages/Terms'
 import SignIn from '@/pages/SignIn'
 import SignUp from '@/pages/SignUp'
-import Cart from '@/pages/Cart'
 import Wishlist from '@/pages/Wishlist'
-import Checkout from '@/pages/Checkout'
 import Dashboard from '@/pages/Dashboard'
 import Profile from '@/pages/Profile'
 import AdminDashboard from '@/pages/AdminDashboard'
@@ -28,6 +28,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/vehicles/:id" element={<VehicleDetails />} />
+        <Route path="/bikes" element={<BikesShop />} />
+        <Route path="/bikes/:id" element={<BikeDetails />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/brands" element={<Brands />} />
         <Route path="/about" element={<About />} />
@@ -38,9 +40,7 @@ function App() {
         <Route path="/sign-in/*" element={<SignIn />} />
         <Route path="/sign-up/*" element={<SignUp />} />
 
-        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
         <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
-        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
         <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />

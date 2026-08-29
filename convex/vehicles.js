@@ -100,7 +100,7 @@ export const create = mutation({
     categoryId: v.id('categories'),
     model: v.string(),
     year: v.number(),
-    price: v.number(),
+    price: v.optional(v.number()),
     mileage: v.number(),
     fuelType: v.string(),
     transmission: v.string(),

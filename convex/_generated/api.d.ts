@@ -9,13 +9,13 @@
  */
 
 import type * as addresses from "../addresses.js";
+import type * as bikes from "../bikes.js";
 import type * as brands from "../brands.js";
-import type * as cart from "../cart.js";
 import type * as categories from "../categories.js";
 import type * as coupons from "../coupons.js";
 import type * as notifications from "../notifications.js";
 import type * as orders from "../orders.js";
-import type * as payments from "../payments.js";
+import type * as ratings from "../ratings.js";
 import type * as recentlyViewed from "../recentlyViewed.js";
 import type * as reviews from "../reviews.js";
 import type * as seed from "../seed.js";
@@ -31,13 +31,13 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   addresses: typeof addresses;
+  bikes: typeof bikes;
   brands: typeof brands;
-  cart: typeof cart;
   categories: typeof categories;
   coupons: typeof coupons;
   notifications: typeof notifications;
   orders: typeof orders;
-  payments: typeof payments;
+  ratings: typeof ratings;
   recentlyViewed: typeof recentlyViewed;
   reviews: typeof reviews;
   seed: typeof seed;

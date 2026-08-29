@@ -12,37 +12,32 @@ export const getById = query({
   handler: async (ctx, args) => ctx.db.get(args.id),
 })
 
-// Creates an order from the user's cart. Payment is confirmed separately by
-// a Convex action once Stripe/M-Pesa integration is wired in (see the
-// `paymentMethod` field — this only records intent, not a completed charge).
+// No in-app checkout anymore (cart + payment integrations were removed —
+// this dealership sells over WhatsApp). This mutation is kept so admin can
+// still log a sale manually for record-keeping after a deal is agreed;
+// nothing in the storefront calls it automatically.
 export const create = mutation({
   args: {
     userId: v.id('users'),
-    addressId: v.id('addresses'),
-    items: v.array(v.object({ vehicleId: v.id('vehicles'), price: v.number(), quantity: v.number() })),
-    subtotal: v.number(),
-    tax: v.number(),
-    shipping: v.number(),
-    discount: v.number(),
-    total: v.number(),
+    addressId: v.optional(v.id('addresses')),
+    items: v.array(v.object({ vehicleId: v.id('vehicles'), price: v.optional(v.number()), quantity: v.number() })),
+    subtotal: v.optional(v.number()),
+    tax: v.optional(v.number()),
+    shipping: v.optional(v.number()),
+    discount: v.optional(v.number()),
+    total: v.optional(v.number()),
     couponCode: v.optional(v.string()),
-    paymentMethod: v.union(v.literal('stripe'), v.literal('mpesa')),
+    paymentMethod: v.optional(v.string()), // e.g. "cash", "bank transfer"
   },
   handler: async (ctx, args) => {
     const now = Date.now()
-    const id = await ctx.db.insert('orders', {
+    return await ctx.db.insert('orders', {
       ...args,
       paymentStatus: 'pending',
       orderStatus: 'processing',
       createdAt: now,
       updatedAt: now,
     })
-
-    // Clear the user's cart after the order is placed
-    const cartItems = await ctx.db.query('cart').withIndex('by_user', (q) => q.eq('userId', args.userId)).collect()
-    await Promise.all(cartItems.map((item) => ctx.db.delete(item._id)))
-
-    return id
   },
 })
 

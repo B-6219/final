@@ -5,7 +5,7 @@ import { FiLock } from 'react-icons/fi'
 const clerkConfigured = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)
 
 /**
- * Wrap any route that requires sign-in (cart, checkout, wishlist, profile,
+ * Wrap any route that requires sign-in (wishlist, profile, orders,
  * orders...). `adminOnly` additionally requires role === 'admin' on the
  * Convex `users` record, kept in sync with Clerk by useCurrentUser.
  */

@@ -1,19 +1,22 @@
 import { useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import { FiHeart, FiShuffle, FiStar, FiCheck, FiPhone, FiMapPin } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import { Breadcrumbs, Avatar } from '@/components/ui/States'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import VehicleCard from '@/components/vehicle/VehicleCard'
 import ReviewCard from '@/components/ui/ReviewCard'
+import RatingBreakdown from '@/components/ui/RatingBreakdown'
 import Modal from '@/components/ui/Modal'
-import { formatPrice, formatMileage } from '@/lib/utils'
+import { formatMileage } from '@/lib/utils'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useToast } from '@/context/ToastContext'
 import { useVehicle, useRelatedVehicles } from '@/hooks/useVehicles'
 import { useReviews } from '@/hooks/useReviews'
 import { useRecordView } from '@/hooks/useRecentlyViewed'
-import { useCart } from '@/hooks/useCart'
 import { useWishlist } from '@/hooks/useWishlist'
+import { useRatings } from '@/hooks/useRatings'
 
 const DEFAULT_FEATURES = [
   'Leather Interior', 'Adaptive Cruise Control', 'Panoramic Sunroof', 'Premium Sound System',
@@ -26,8 +29,8 @@ export default function VehicleDetails() {
   const { vehicle, isLoading } = useVehicle(id)
   const { vehicles: related } = useRelatedVehicles(vehicle)
   const { reviews, addReview, canReview } = useReviews(vehicle?.id)
-  const { addItem } = useCart()
   const { has, toggle } = useWishlist()
+  const { overall, breakdown } = useRatings('vehicle', vehicle?.id)
   const [activeImage, setActiveImage] = useState(0)
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
   const [reviewForm, setReviewForm] = useState({ rating: 5, title: '', comment: '' })
@@ -62,7 +65,7 @@ export default function VehicleDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
           {/* Gallery */}
           <div>
-            <div className="aspect-4/3 overflow-hidden bg-graphite border border-graphite-light mb-3">
+            <div className="aspect-[4/3] overflow-hidden bg-graphite border border-graphite-light mb-3">
               <img src={gallery[activeImage]} alt={vehicle.model} className="w-full h-full object-cover" />
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -70,7 +73,7 @@ export default function VehicleDetails() {
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`aspect-4/3 overflow-hidden border ${i === activeImage ? 'border-amber' : 'border-graphite-light'}`}
+                  className={`aspect-[4/3] overflow-hidden border ${i === activeImage ? 'border-amber' : 'border-graphite-light'}`}
                 >
                   <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
@@ -88,12 +91,10 @@ export default function VehicleDetails() {
 
             <div className="flex items-center gap-2 mt-3 text-amber text-sm">
               {Array.from({ length: 5 }).map((_, i) => (
-                <FiStar key={i} size={14} className={i < Math.round(vehicle.rating) ? 'fill-amber' : 'text-graphite-light'} />
+                <FiStar key={i} size={14} className={i < Math.round(overall) ? 'fill-amber' : 'text-graphite-light'} />
               ))}
-              <span className="text-silver">{vehicle.rating.toFixed(1)} · {reviews.length} review{reviews.length !== 1 ? 's' : ''}</span>
+              <span className="text-silver">{overall.toFixed(1)} overall · {reviews.length} review{reviews.length !== 1 ? 's' : ''}</span>
             </div>
-
-            <p className="font-display text-4xl text-bone mt-6">{formatPrice(vehicle.price)}</p>
 
             {/* Spec strip */}
             <div className="spec-strip grid grid-cols-2 sm:grid-cols-4 gap-px bg-graphite-light mt-6 border border-graphite-light">
@@ -115,15 +116,22 @@ export default function VehicleDetails() {
                 `A pristine ${vehicle.year} ${vehicle.brand} ${vehicle.model}, fully inspected and dealer-certified. Finished in a striking factory color with a meticulously maintained service history — this vehicle is ready for immediate delivery.`}
             </p>
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3 mt-8">
-              <Button className="flex-1" onClick={() => { addItem(vehicle.id); showToast('Added to cart', 'success') }}>
-                Add to Cart
-              </Button>
-              <NavLink to="/checkout" className="flex-1">
-                <Button variant="amber" className="w-full" onClick={() => addItem(vehicle.id)}>Buy Now</Button>
-              </NavLink>
-            </div>
+            {/* Ratings breakdown — each car carries its own distinct profile */}
+            {breakdown.length > 0 && (
+              <div className="mt-6">
+                <RatingBreakdown breakdown={breakdown} />
+              </div>
+            )}
+
+            {/* Actions — no pricing anywhere; every enquiry routes to WhatsApp */}
+            <a
+              href={buildWhatsAppLink(vehicle)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 flex items-center justify-center gap-2 bg-[#25D366] text-obsidian font-display uppercase text-base tracking-wide py-4 hover:bg-[#1ebe5a] transition-colors"
+            >
+              <FaWhatsapp size={20} /> Enquire on WhatsApp
+            </a>
             <div className="flex gap-3 mt-3">
               <Button
                 variant="outline"
@@ -138,14 +146,14 @@ export default function VehicleDetails() {
 
             {/* Dealer info */}
             <div className="mt-8 border border-graphite-light p-5 flex items-center gap-4">
-              <Avatar name={vehicle.dealerName || 'alhusnain Motors Nairobi'} size={44} />
+              <Avatar name={vehicle.dealerName || 'Al-Husnain Motors Nairobi'} size={44} />
               <div className="flex-1">
-                <p className="text-bone text-sm font-medium">{vehicle.dealerName || 'alhusnain Motors Nairobi'}</p>
+                <p className="text-bone text-sm font-medium">{vehicle.dealerName || 'Al-Husnain Motors Nairobi'}</p>
                 <p className="text-silver-dim text-xs flex items-center gap-1 mt-0.5">
                   <FiMapPin size={12} /> {vehicle.dealerLocation || 'Westlands, Nairobi'}
                 </p>
               </div>
-              <a href="tel:+254700000000" className="text-amber hover:text-bone transition-colors"><FiPhone size={20} /></a>
+              <a href="tel:+254791948411" className="text-amber hover:text-bone transition-colors"><FiPhone size={20} /></a>
             </div>
           </div>
         </div>

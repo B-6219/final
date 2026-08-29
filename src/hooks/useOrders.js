@@ -30,33 +30,6 @@ export function useUserOrders() {
   return { orders: MOCK_ORDERS, isLoading: false, isConnected: false }
 }
 
-/** Places an order from a given cart-item shape + address + payment method.
- * Falls back to a fake order id when Convex isn't connected so the
- * Checkout confirmation step still works during setup. */
-export function useCreateOrder() {
-  const { convexUser } = useCurrentUser()
-  const createMut = convex ? useMutation(api.orders.create) : null
-
-  return async ({ items, addressId, subtotal, tax, shipping, discount, total, couponCode, paymentMethod }) => {
-    if (convex && createMut && convexUser) {
-      return await createMut({
-        userId: convexUser._id,
-        addressId,
-        items,
-        subtotal,
-        tax,
-        shipping,
-        discount,
-        total,
-        couponCode,
-        paymentMethod,
-      })
-    }
-    // Mock fallback — just generate a plausible order id for the UI to show.
-    return `CM-${Math.floor(100000 + Math.random() * 900000)}`
-  }
-}
-
 /** Admin — all orders across every customer, with status updates. */
 export function useAdminOrders() {
   const raw = convex ? useQuery(api.orders.listAll, {}) : undefined

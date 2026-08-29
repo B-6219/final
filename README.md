@@ -1,4 +1,4 @@
-# alhusnain Motors — Premium Car E-Commerce Platform
+# Al-Husnain Motors — Premium Car E-Commerce Platform
 
 ## Phase 1 of N: Project Foundation ✅
 

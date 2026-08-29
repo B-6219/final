@@ -1,6 +1,7 @@
 export const MAIN_NAV = [
   { label: 'Home', to: '/' },
   { label: 'Shop', to: '/shop' },
+  { label: 'Bikes', to: '/bikes' },
   { label: 'Categories', to: '/categories' },
   { label: 'Brands', to: '/brands' },
   { label: 'About', to: '/about' },
@@ -9,7 +10,7 @@ export const MAIN_NAV = [
 
 export const FOOTER_LINKS = {
   company: [
-    { label: 'About alhusnain Motors', to: '/about' },
+    { label: 'About Al-Husnain Motors', to: '/about' },
     { label: 'Contact', to: '/contact' },
     { label: 'Careers', to: '/careers' },
   ],

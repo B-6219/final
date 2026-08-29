@@ -8,7 +8,7 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Modal from '@/components/ui/Modal'
 import OrderCard from '@/components/ui/OrderCard'
-import { formatPrice, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { useToast } from '@/context/ToastContext'
 import { useAddresses } from '@/hooks/useAddresses'
@@ -132,7 +132,7 @@ function AddressesPanel() {
       {isLoading ? (
         <p className="spec-strip text-silver text-sm uppercase tracking-widest">Loading…</p>
       ) : addresses.length === 0 ? (
-        <EmptyState icon={FiMapPin} title="No addresses saved" message="Add a shipping address to speed up checkout." />
+        <EmptyState icon={FiMapPin} title="No addresses saved" message="Add a shipping address so delivery is quick once a deal is agreed." />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {addresses.map((a) => (
@@ -211,7 +211,7 @@ function RecentPanel() {
             <div>
               <p className="text-silver text-xs uppercase">{v.brand}</p>
               <p className="font-display uppercase text-bone">{v.model}</p>
-              <p className="text-bone text-sm">{formatPrice(v.price)}</p>
+              <p className="text-silver-dim text-xs spec-strip">{v.year}</p>
             </div>
           </NavLink>
         ))}

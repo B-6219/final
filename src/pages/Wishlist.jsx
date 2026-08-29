@@ -1,22 +1,16 @@
 import { NavLink } from 'react-router-dom'
-import { FiHeart, FiShoppingCart, FiTrash2 } from 'react-icons/fi'
+import { FiHeart, FiTrash2 } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import { Breadcrumbs, EmptyState } from '@/components/ui/States'
 import Button from '@/components/ui/Button'
-import { formatPrice, formatMileage } from '@/lib/utils'
+import { formatMileage } from '@/lib/utils'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useToast } from '@/context/ToastContext'
 import { useWishlist } from '@/hooks/useWishlist'
-import { useCart } from '@/hooks/useCart'
 
 export default function Wishlist() {
   const { showToast } = useToast()
   const { items, remove, isLoading } = useWishlist()
-  const { addItem } = useCart()
-
-  const moveToCart = (wishlistId, vehicleId) => {
-    addItem(vehicleId)
-    remove(wishlistId)
-    showToast('Moved to cart', 'success')
-  }
 
   const handleRemove = (wishlistId) => {
     remove(wishlistId)
@@ -72,12 +66,14 @@ export default function Wishlist() {
                     <p className="spec-strip text-silver text-xs mt-2">
                       {v.year} · {formatMileage(v.mileage)} · {v.fuel}
                     </p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <p className="font-display text-xl text-bone">{formatPrice(v.price)}</p>
-                      <Button size="sm" icon={FiShoppingCart} onClick={() => moveToCart(wishlistId, v.id)}>
-                        Add to Cart
-                      </Button>
-                    </div>
+                    <a
+                      href={buildWhatsAppLink(v)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 flex items-center justify-center gap-2 bg-[#25D366] text-obsidian font-display uppercase text-sm tracking-wide py-2.5 hover:bg-[#1ebe5a] transition-colors"
+                    >
+                      <FaWhatsapp size={16} /> Enquire on WhatsApp
+                    </a>
                   </div>
                 </div>
               )

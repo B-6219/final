@@ -5,10 +5,11 @@ import { Breadcrumbs } from '@/components/ui/States'
 const FAQS = [
   { q: 'How does vehicle inspection work?', a: 'Every vehicle undergoes a 150-point mechanical and cosmetic inspection by certified technicians before it\u2019s listed. The full report is attached to the listing.' },
   { q: 'Can I return a vehicle after purchase?', a: 'Yes — you have 7 days or 500 km (whichever comes first) to return a vehicle for a full refund if it doesn\u2019t meet expectations.' },
-  { q: 'What payment methods do you accept?', a: 'We support card payments via Stripe and mobile money via M-Pesa. Financing options are available at checkout for qualifying vehicles.' },
-  { q: 'Do you deliver nationwide?', a: 'Yes, we deliver to all major cities and most rural areas. Delivery timelines and costs are calculated at checkout based on your address.' },
-  { q: 'How do I sell my car through alhusnain Motors?', a: 'Use the "Sell Your Car" button on the homepage to submit your vehicle details. Our team will schedule an inspection and provide a valuation within 48 hours.' },
-  { q: 'Is financing available?', a: 'Financing is available on select vehicles through our lending partners. Eligibility and rates are shown on the vehicle details page before checkout.' },
+  { q: 'How do I find out the price of a vehicle?', a: 'We don\u2019t list prices online. Tap "Enquire on WhatsApp" on any listing and our team will give you the price, answer questions, and arrange a viewing directly.' },
+  { q: 'How do I pay for a vehicle?', a: 'Payment is arranged directly with our sales team over WhatsApp or in person \u2014 we currently accept cash, bank transfer, and M-Pesa. We\u2019ll walk you through it once you\u2019ve chosen a vehicle.' },
+  { q: 'Do you deliver nationwide?', a: 'Yes, we deliver to all major cities and most rural areas. Delivery timelines and costs are confirmed with you directly over WhatsApp.' },
+  { q: 'How do I sell my car through Al-Husnain Motors?', a: 'Use the "Sell Your Car" button on the homepage to submit your vehicle details. Our team will schedule an inspection and provide a valuation within 48 hours.' },
+  { q: 'Is financing available?', a: 'Financing is available on select vehicles through our lending partners. Ask about eligibility and rates when you enquire on WhatsApp.' },
 ]
 
 export default function FAQ() {

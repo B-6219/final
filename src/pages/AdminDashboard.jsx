@@ -16,14 +16,18 @@ import DashboardCard from '@/components/ui/DashboardCard'
 import { formatPrice, cn } from '@/lib/utils'
 import { useToast } from '@/context/ToastContext'
 import { useVehicleList, useVehicleAdmin } from '@/hooks/useVehicles'
+import { useBikeList, useBikeAdmin } from '@/hooks/useBikes'
 import { useBrands, useCategories } from '@/hooks/useTaxonomy'
+import { useRatings, useSetRating } from '@/hooks/useRatings'
 import ImageUploader from '@/components/admin/ImageUploader'
+import RatingsEditor from '@/components/admin/RatingsEditor'
 import { useAdminOrders } from '@/hooks/useOrders'
 import { useCustomers } from '@/hooks/useCustomers'
 
 const TABS = [
   { key: 'overview', label: 'Overview' },
   { key: 'vehicles', label: 'Vehicles' },
+  { key: 'bikes', label: 'Bikes' },
   { key: 'orders', label: 'Orders' },
   { key: 'customers', label: 'Customers' },
   { key: 'analytics', label: 'Analytics' },
@@ -68,6 +72,7 @@ export default function AdminDashboard() {
 
         {tab === 'overview' && <OverviewTab vehicleCount={vehicles.length} />}
         {tab === 'vehicles' && <VehiclesTab />}
+        {tab === 'bikes' && <BikesTab />}
         {tab === 'orders' && <OrdersTab />}
         {tab === 'customers' && <CustomersTab />}
         {tab === 'analytics' && <AnalyticsTab />}
@@ -121,6 +126,7 @@ function VehiclesTab() {
   const { brands } = useBrands()
   const { categories } = useCategories()
   const { updateVehicle, removeVehicle, setFeatured, createVehicle, isConnected } = useVehicleAdmin()
+  const setRating = useSetRating()
 
   const [localVehicles, setLocalVehicles] = useState(vehicles)
   useEffect(() => { setLocalVehicles(vehicles) }, [vehicles.length, isLoading])
@@ -128,6 +134,7 @@ function VehiclesTab() {
   const [search, setSearch] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [ratingsForm, setRatingsForm] = useState({})
   const [saving, setSaving] = useState(false)
 
   const filtered = localVehicles.filter((v) =>
@@ -152,6 +159,16 @@ function VehiclesTab() {
     images: [],
   }
 
+  const { breakdown: existingRatings } = useRatings('vehicle', editing?.id)
+  useEffect(() => {
+    if (editing?.id && existingRatings.length) {
+      setRatingsForm(Object.fromEntries(existingRatings.map((r) => [r.category, r.score])))
+    } else if (!editing?.id) {
+      setRatingsForm({})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing?.id, existingRatings.length])
+
   const openNew = () => {
     if (isConnected && (brands.length === 0 || categories.length === 0)) {
       showToast(
@@ -164,6 +181,13 @@ function VehiclesTab() {
     setModalOpen(true)
   }
   const openEdit = (v) => { setEditing({ ...emptyForm, ...v }); setModalOpen(true) }
+
+  const persistRatings = async (vehicleId) => {
+    const entries = Object.entries(ratingsForm).filter(([, v]) => v !== '' && v != null)
+    await Promise.all(
+      entries.map(([category, score]) => setRating({ itemType: 'vehicle', itemId: vehicleId, category, score: Number(score) }))
+    )
+  }
 
   const save = async (e) => {
     e.preventDefault()
@@ -185,6 +209,7 @@ function VehiclesTab() {
               images: editing.images,
             },
           })
+          await persistRatings(editing.id)
         }
         showToast('Vehicle updated', 'success')
       } else if (isConnected) {
@@ -193,7 +218,7 @@ function VehiclesTab() {
           categoryId: editing.categoryId,
           model: editing.model,
           year: Number(editing.year),
-          price: Number(editing.price),
+          price: editing.price ? Number(editing.price) : undefined,
           mileage: Number(editing.mileage) || 0,
           fuelType: editing.fuelType,
           transmission: editing.transmission,
@@ -205,15 +230,16 @@ function VehiclesTab() {
           stock: Number(editing.stock) || 1,
           featured: editing.featured,
         })
+        await persistRatings(id)
         const brandName = brands.find((b) => b._id === editing.brandId)?.name
         setLocalVehicles((prev) => [
-          { ...editing, id, brand: brandName, price: Number(editing.price), image: editing.images[0] },
+          { ...editing, id, brand: brandName, price: editing.price ? Number(editing.price) : undefined, image: editing.images[0] },
           ...prev,
         ])
         showToast('Vehicle added', 'success')
       } else {
         const newVehicle = {
-          ...editing, id: `v${localVehicles.length + 1}`, price: Number(editing.price),
+          ...editing, id: `v${localVehicles.length + 1}`, price: editing.price ? Number(editing.price) : undefined,
           rating: 0, image: editing.images[0] ?? localVehicles[0]?.image,
         }
         setLocalVehicles((prev) => [newVehicle, ...prev])
@@ -272,7 +298,7 @@ function VehiclesTab() {
             <tr className="border-b border-graphite-light text-left text-silver text-xs uppercase tracking-wide">
               <th className="p-4">Vehicle</th>
               <th className="p-4">Year</th>
-              <th className="p-4">Price</th>
+              <th className="p-4" title="Internal reference only — never shown to customers">Internal Price</th>
               <th className="p-4">Stock</th>
               <th className="p-4">Featured</th>
               <th className="p-4 text-right">Actions</th>
@@ -285,7 +311,7 @@ function VehiclesTab() {
                   <p className="text-bone font-display uppercase">{v.brand} {v.model}</p>
                 </td>
                 <td className="p-4 text-silver spec-strip">{v.year}</td>
-                <td className="p-4 text-bone">{formatPrice(v.price)}</td>
+                <td className="p-4 text-bone">{v.price ? formatPrice(v.price) : <span className="text-silver-dim">—</span>}</td>
                 <td className="p-4 text-silver spec-strip">{v.stock ?? 1}</td>
                 <td className="p-4">
                   <button onClick={() => toggleFeatured(v.id)}>
@@ -317,7 +343,13 @@ function VehiclesTab() {
 
             <Input label="Model" required value={editing.model} onChange={(e) => setEditing({ ...editing, model: e.target.value })} />
             <Input label="Year" type="number" required value={editing.year} onChange={(e) => setEditing({ ...editing, year: e.target.value })} />
-            <Input label="Price" type="number" required value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} />
+            <Input
+              label="Internal Price (not shown to customers)"
+              type="number"
+              value={editing.price}
+              onChange={(e) => setEditing({ ...editing, price: e.target.value })}
+              placeholder="Optional — for your records only"
+            />
             <Input label="Mileage" type="number" value={editing.mileage} onChange={(e) => setEditing({ ...editing, mileage: e.target.value })} />
 
             <Select label="Fuel Type" value={editing.fuelType} onChange={(v) => setEditing({ ...editing, fuelType: v })} options={['Petrol', 'Diesel', 'Hybrid', 'Electric', 'LPG'].map((f) => ({ value: f, label: f }))} />
@@ -333,7 +365,233 @@ function VehiclesTab() {
 
             <Input label="Description" as="textarea" rows={3} className="col-span-2 resize-none" value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
 
+            <RatingsEditor values={ratingsForm} onChange={setRatingsForm} />
+
             <Button type="submit" disabled={saving} className="col-span-2 mt-2">{saving ? 'Saving…' : 'Save Vehicle'}</Button>
+          </form>
+        )}
+      </Modal>
+    </div>
+  )
+}
+
+const BIKE_TYPE_OPTIONS = ['Sport', 'Cruiser', 'Naked', 'Touring', 'Scooter', 'Off-Road']
+const BIKE_TRANSMISSION_OPTIONS = ['Manual', 'Automatic', 'Semi-Automatic']
+const BIKE_CONDITION_OPTIONS = ['New', 'Used', 'Certified Pre-Owned']
+
+function BikesTab() {
+  const { showToast } = useToast()
+  const { bikes, isLoading } = useBikeList()
+  const { updateBike, removeBike, setFeatured, createBike, isConnected } = useBikeAdmin()
+  const setRating = useSetRating()
+
+  const [localBikes, setLocalBikes] = useState(bikes)
+  useEffect(() => { setLocalBikes(bikes) }, [bikes.length, isLoading])
+
+  const [search, setSearch] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editing, setEditing] = useState(null)
+  const [ratingsForm, setRatingsForm] = useState({})
+  const [saving, setSaving] = useState(false)
+
+  const filtered = localBikes.filter((b) =>
+    `${b.brand} ${b.model}`.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const emptyForm = {
+    brand: '',
+    model: '',
+    year: new Date().getFullYear(),
+    price: '',
+    mileage: 0,
+    engineCapacity: '',
+    bikeType: 'Sport',
+    transmission: 'Manual',
+    condition: 'Used',
+    color: '',
+    description: '',
+    featured: false,
+    images: [],
+  }
+
+  const { breakdown: existingRatings } = useRatings('bike', editing?.id)
+  useEffect(() => {
+    if (editing?.id && existingRatings.length) {
+      setRatingsForm(Object.fromEntries(existingRatings.map((r) => [r.category, r.score])))
+    } else if (!editing?.id) {
+      setRatingsForm({})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing?.id, existingRatings.length])
+
+  const openNew = () => { setEditing(emptyForm); setModalOpen(true) }
+  const openEdit = (b) => { setEditing({ ...emptyForm, ...b }); setModalOpen(true) }
+
+  const persistRatings = async (bikeId) => {
+    const entries = Object.entries(ratingsForm).filter(([, v]) => v !== '' && v != null)
+    await Promise.all(
+      entries.map(([category, score]) => setRating({ itemType: 'bike', itemId: bikeId, category, score: Number(score) }))
+    )
+  }
+
+  const save = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+    try {
+      if (editing.id) {
+        setLocalBikes((prev) => prev.map((b) => (b.id === editing.id ? { ...b, ...editing } : b)))
+        if (isConnected) {
+          await updateBike({
+            id: editing.id,
+            patch: {
+              model: editing.model, year: editing.year, price: editing.price,
+              mileage: editing.mileage, engineCapacity: editing.engineCapacity, bikeType: editing.bikeType,
+              transmission: editing.transmission, condition: editing.condition, color: editing.color,
+              description: editing.description, images: editing.images,
+            },
+          })
+          await persistRatings(editing.id)
+        }
+        showToast('Bike updated', 'success')
+      } else if (isConnected) {
+        const id = await createBike({
+          brand: editing.brand,
+          model: editing.model,
+          year: Number(editing.year),
+          price: editing.price ? Number(editing.price) : undefined,
+          mileage: Number(editing.mileage) || 0,
+          engineCapacity: Number(editing.engineCapacity) || 0,
+          bikeType: editing.bikeType,
+          transmission: editing.transmission,
+          condition: editing.condition,
+          color: editing.color || 'Unspecified',
+          description: editing.description || `${editing.year} ${editing.brand} ${editing.model}`,
+          features: [],
+          images: editing.images,
+          featured: editing.featured,
+        })
+        await persistRatings(id)
+        setLocalBikes((prev) => [
+          { ...editing, id, price: editing.price ? Number(editing.price) : undefined, image: editing.images[0] },
+          ...prev,
+        ])
+        showToast('Bike added', 'success')
+      } else {
+        const newBike = {
+          ...editing, id: `b${localBikes.length + 1}`, price: editing.price ? Number(editing.price) : undefined,
+          rating: 0, image: editing.images[0] ?? localBikes[0]?.image,
+        }
+        setLocalBikes((prev) => [newBike, ...prev])
+        showToast('Bike added', 'success')
+      }
+      setModalOpen(false)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const remove = async (id) => {
+    setLocalBikes((prev) => prev.filter((b) => b.id !== id))
+    if (isConnected) await removeBike({ id })
+    showToast('Bike deleted', 'info')
+  }
+
+  const toggleFeatured = async (id) => {
+    const next = !localBikes.find((b) => b.id === id)?.featured
+    setLocalBikes((prev) => prev.map((b) => (b.id === id ? { ...b, featured: next } : b)))
+    if (isConnected) await setFeatured({ id, featured: next })
+  }
+
+  return (
+    <div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-silver" size={16} />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search bikes…"
+            className="bg-graphite border border-graphite-light pl-9 pr-4 py-2.5 text-sm text-bone placeholder:text-silver-dim focus:outline-none focus:border-amber w-full sm:w-72"
+          />
+        </div>
+        <Button size="sm" icon={FiPlus} onClick={openNew}>Add Bike</Button>
+      </div>
+
+      <div className="overflow-x-auto border border-graphite-light">
+        <table className="w-full text-sm min-w-[720px]">
+          <thead>
+            <tr className="border-b border-graphite-light text-left text-silver text-xs uppercase tracking-wide">
+              <th className="p-4">Bike</th>
+              <th className="p-4">Type</th>
+              <th className="p-4">Year</th>
+              <th className="p-4" title="Internal reference only — never shown to customers">Internal Price</th>
+              <th className="p-4">Featured</th>
+              <th className="p-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((b) => (
+              <tr key={b.id} className="border-b border-graphite-light last:border-0">
+                <td className="p-4">
+                  <p className="text-bone font-display uppercase">{b.brand} {b.model}</p>
+                </td>
+                <td className="p-4 text-silver spec-strip">{b.bikeType}</td>
+                <td className="p-4 text-silver spec-strip">{b.year}</td>
+                <td className="p-4 text-bone">{b.price ? formatPrice(b.price) : <span className="text-silver-dim">—</span>}</td>
+                <td className="p-4">
+                  <button onClick={() => toggleFeatured(b.id)}>
+                    <FiStar size={16} className={b.featured ? 'text-amber fill-amber' : 'text-silver-dim'} />
+                  </button>
+                </td>
+                <td className="p-4">
+                  <div className="flex items-center justify-end gap-3">
+                    <button onClick={() => openEdit(b)} className="text-silver hover:text-bone" aria-label="Edit"><FiEdit2 size={15} /></button>
+                    <button onClick={() => remove(b.id)} className="text-silver hover:text-racing-red" aria-label="Delete"><FiTrash2 size={15} /></button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing?.id ? 'Edit Bike' : 'Add Bike'}>
+        {editing && (
+          <form onSubmit={save} className="grid grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-1">
+            <div className="col-span-2">
+              <p className="text-xs uppercase tracking-wide text-silver font-display mb-2">Photos</p>
+              <ImageUploader images={editing.images ?? []} onChange={(images) => setEditing({ ...editing, images })} />
+            </div>
+
+            <Input label="Brand" required value={editing.brand} onChange={(e) => setEditing({ ...editing, brand: e.target.value })} />
+            <Input label="Model" required value={editing.model} onChange={(e) => setEditing({ ...editing, model: e.target.value })} />
+
+            <Input label="Year" type="number" required value={editing.year} onChange={(e) => setEditing({ ...editing, year: e.target.value })} />
+            <Input
+              label="Internal Price (not shown to customers)"
+              type="number"
+              value={editing.price}
+              onChange={(e) => setEditing({ ...editing, price: e.target.value })}
+              placeholder="Optional — for your records only"
+            />
+            <Input label="Mileage" type="number" value={editing.mileage} onChange={(e) => setEditing({ ...editing, mileage: e.target.value })} />
+            <Input label="Engine Capacity (cc)" type="number" required value={editing.engineCapacity} onChange={(e) => setEditing({ ...editing, engineCapacity: e.target.value })} />
+
+            <Select label="Bike Type" value={editing.bikeType} onChange={(v) => setEditing({ ...editing, bikeType: v })} options={BIKE_TYPE_OPTIONS.map((t) => ({ value: t, label: t }))} />
+            <Select label="Transmission" value={editing.transmission} onChange={(v) => setEditing({ ...editing, transmission: v })} options={BIKE_TRANSMISSION_OPTIONS.map((t) => ({ value: t, label: t }))} />
+            <Select label="Condition" value={editing.condition} onChange={(v) => setEditing({ ...editing, condition: v })} options={BIKE_CONDITION_OPTIONS.map((c) => ({ value: c, label: c }))} />
+            <Input label="Color" value={editing.color} onChange={(e) => setEditing({ ...editing, color: e.target.value })} />
+
+            <label className="flex items-center gap-2 mt-6">
+              <input type="checkbox" checked={editing.featured} onChange={(e) => setEditing({ ...editing, featured: e.target.checked })} />
+              <span className="text-sm text-silver">Featured</span>
+            </label>
+
+            <Input label="Description" as="textarea" rows={3} className="col-span-2 resize-none" value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
+
+            <RatingsEditor values={ratingsForm} onChange={setRatingsForm} />
+
+            <Button type="submit" disabled={saving} className="col-span-2 mt-2">{saving ? 'Saving…' : 'Save Bike'}</Button>
           </form>
         )}
       </Modal>

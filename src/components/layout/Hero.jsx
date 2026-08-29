@@ -1,24 +1,28 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiSearch } from 'react-icons/fi'
 import Button from '@/components/ui/Button'
 
 const POSTER = 'https://assets.mixkit.co/videos/24481/24481-thumb-720-3.jpg'
-
 // Swap this for your own licensed footage before going to production —
 // this is a Mixkit sample used for prototyping the layout.
-//const VIDEO_SRC = 'https://assets.mixkit.co/videos/24481/24481-720.mp4'
-
 const VIDEO_SRC = '/videos/back.mp4'
 
-
 export default function Hero() {
+  const navigate = useNavigate()
+  const [query, setQuery] = useState('')
   const [videoFailed, setVideoFailed] = useState(false)
   const prefersReducedMotion =
     typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
+  const handleSearch = (e) => {
+    e.preventDefault()
+    navigate(query.trim() ? `/shop?q=${encodeURIComponent(query.trim())}` : '/shop')
+  }
+
   return (
-    <section className="relative h-[92vh] min-h-160 flex items-end overflow-hidden">
+    <section className="relative h-[92vh] min-h-[640px] flex items-end overflow-hidden">
       {/* Background video */}
       <div className="absolute inset-0">
         {!videoFailed && !prefersReducedMotion ? (
@@ -41,8 +45,8 @@ export default function Hero() {
             className="w-full h-full object-cover"
           />
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-obsidian via-obsidian/60 to-obsidian/20" />
-        <div className="absolute inset-0 bg-linear-to-r from-obsidian/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-obsidian/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/70 via-transparent to-transparent" />
       </div>
 
       <div className="relative mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20">
@@ -88,12 +92,14 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSearch}
           className="mt-10 max-w-2xl bg-graphite/90 backdrop-blur-sm border border-graphite-light p-2 flex items-center gap-2"
         >
           <FiSearch className="text-silver ml-3" size={18} />
           <input
             type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by brand, model, or keyword…"
             className="bg-transparent flex-1 py-3 text-sm text-bone placeholder:text-silver-dim focus:outline-none"
           />

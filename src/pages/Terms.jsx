@@ -1,12 +1,12 @@
 import { Breadcrumbs } from '@/components/ui/States'
 
 const SECTIONS = [
-  { title: 'Acceptance of Terms', body: 'By using alhusnain Motors, you agree to these terms. If you do not agree, please discontinue use of the platform.' },
+  { title: 'Acceptance of Terms', body: 'By using Al-Husnain Motors, you agree to these terms. If you do not agree, please discontinue use of the platform.' },
   { title: 'Vehicle Listings', body: 'All vehicles are inspected prior to listing, but buyers are encouraged to review the full inspection report and, where possible, arrange an independent inspection before purchase.' },
-  { title: 'Orders & Payment', body: 'Orders are confirmed once payment is successfully processed. Prices are subject to change without notice until an order is placed.' },
-  { title: 'Delivery', body: 'Estimated delivery timelines are provided at checkout and are not guaranteed. alhusnain Motors is not liable for delays caused by circumstances outside our control.' },
+  { title: 'Enquiries & Sales', body: 'Vehicle listings do not display pricing. Enquiries made via WhatsApp are not binding orders \u2014 a sale is only final once terms are agreed directly with our sales team and a deposit or payment is received.' },
+  { title: 'Delivery', body: 'Estimated delivery timelines are confirmed directly with our sales team and are not guaranteed. Al-Husnain Motors is not liable for delays caused by circumstances outside our control.' },
   { title: 'Returns', body: 'Vehicles may be returned within 7 days or 500 km of delivery, whichever comes first, subject to the vehicle being in its delivered condition.' },
-  { title: 'Limitation of Liability', body: 'alhusnain Motors is not liable for indirect or consequential damages arising from use of the platform, to the fullest extent permitted by law.' },
+  { title: 'Limitation of Liability', body: 'Al-Husnain Motors is not liable for indirect or consequential damages arising from use of the platform, to the fullest extent permitted by law.' },
 ]
 
 export default function Terms() {
