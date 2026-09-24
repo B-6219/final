@@ -38,7 +38,7 @@ export default function BikeDetails() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
           <div>
-            <div className="aspect-[4/3] overflow-hidden bg-graphite border border-graphite-light mb-3">
+            <div className="aspect-4/3 overflow-hidden bg-graphite border border-graphite-light mb-3">
               <img src={gallery[activeImage]} alt={bike.model} className="w-full h-full object-cover" />
             </div>
             {gallery.length > 1 && (
@@ -47,7 +47,7 @@ export default function BikeDetails() {
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`aspect-[4/3] overflow-hidden border ${i === activeImage ? 'border-amber' : 'border-graphite-light'}`}
+                    className={`aspect-4/3 overflow-hidden border ${i === activeImage ? 'border-amber' : 'border-graphite-light'}`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>

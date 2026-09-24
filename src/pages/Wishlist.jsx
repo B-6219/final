@@ -44,7 +44,7 @@ export default function Wishlist() {
               if (!v) return null
               return (
                 <div key={wishlistId} className="bg-graphite border border-graphite-light group">
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-4/3 overflow-hidden">
                     <NavLink to={`/vehicles/${v.id}`}>
                       <img
                         src={v.image}

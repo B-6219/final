@@ -24,7 +24,7 @@ export default function Categories() {
             >
               <NavLink
                 to={`/shop?category=${encodeURIComponent(cat.name)}`}
-                className="group relative border border-graphite-light p-10 flex flex-col justify-between h-56 hover:border-amber transition-colors overflow-hidden block"
+                className="group relative border border-graphite-light p-10 flex-col justify-between h-56 hover:border-amber transition-colors overflow-hidden block"
               >
                 <div className="absolute inset-0 bg-racing-red/0 group-hover:bg-racing-red/5 transition-colors" />
                 <span className="spec-strip text-silver-dim text-xs">{String(i + 1).padStart(2, '0')}</span>

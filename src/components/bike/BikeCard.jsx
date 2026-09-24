@@ -17,7 +17,7 @@ export default function BikeCard({ bike }) {
       transition={{ duration: 0.5 }}
       className="group bg-graphite border border-graphite-light hover:border-silver-dim transition-colors duration-300"
     >
-      <div className="relative overflow-hidden aspect-[4/3]">
+      <div className="relative overflow-hidden aspect-4/3">
         <NavLink to={`/bikes/${id}`}>
           <img
             src={image}

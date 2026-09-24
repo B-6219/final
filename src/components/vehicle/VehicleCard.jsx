@@ -31,7 +31,7 @@ export default function VehicleCard({ vehicle }) {
       className="group bg-graphite border border-graphite-light hover:border-silver-dim transition-colors duration-300"
     >
       {/* Image */}
-      <div className="relative overflow-hidden aspect-[4/3]">
+      <div className="relative overflow-hidden aspect-4/3">
         <NavLink to={`/vehicles/${id}`}>
           <img
             src={image}

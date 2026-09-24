@@ -293,7 +293,7 @@ function VehiclesTab() {
       </div>
 
       <div className="overflow-x-auto border border-graphite-light">
-        <table className="w-full text-sm min-w-[720px]">
+        <table className="w-full text-sm min-w-180">
           <thead>
             <tr className="border-b border-graphite-light text-left text-silver text-xs uppercase tracking-wide">
               <th className="p-4">Vehicle</th>
@@ -518,7 +518,7 @@ function BikesTab() {
       </div>
 
       <div className="overflow-x-auto border border-graphite-light">
-        <table className="w-full text-sm min-w-[720px]">
+        <table className="w-full text-sm min-w-180">
           <thead>
             <tr className="border-b border-graphite-light text-left text-silver text-xs uppercase tracking-wide">
               <th className="p-4">Bike</th>
@@ -632,7 +632,7 @@ function OrdersTab() {
 
   return (
     <div className="overflow-x-auto border border-graphite-light">
-      <table className="w-full text-sm min-w-[640px]">
+      <table className="w-full text-sm min-w-160">
         <thead>
           <tr className="border-b border-graphite-light text-left text-silver text-xs uppercase tracking-wide">
             <th className="p-4">Order</th>
@@ -701,7 +701,7 @@ function CustomersTab() {
         <p className="spec-strip text-silver text-sm uppercase tracking-widest">Loading customers…</p>
       ) : (
         <div className="overflow-x-auto border border-graphite-light">
-          <table className="w-full text-sm min-w-[560px]">
+          <table className="w-full text-sm min-w-140">
             <thead>
               <tr className="border-b border-graphite-light text-left text-silver text-xs uppercase tracking-wide">
                 <th className="p-4">Name</th>

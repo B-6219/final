@@ -28,7 +28,7 @@ export default function Brands() {
               >
                 <NavLink
                   to={`/shop?brand=${encodeURIComponent(brand.name)}`}
-                  className="group border border-graphite-light p-8 flex flex-col justify-between h-40 hover:border-amber transition-colors block"
+                  className="group border border-graphite-light p-8 flex-col justify-between h-40 hover:border-amber transition-colors block"
                 >
                   <span className="font-display text-xl uppercase text-bone">{brand.name}</span>
                   <div className="flex items-center justify-between">

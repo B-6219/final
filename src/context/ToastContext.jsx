@@ -22,7 +22,7 @@ export function ToastProvider({ children }) {
       {children}
       {typeof document !== 'undefined' &&
         createPortal(
-          <div className="fixed bottom-6 right-6 z-[200] flex flex-col gap-3 w-80">
+          <div className="fixed bottom-6 right-6 z-200 flex flex-col gap-3 w-80">
             <AnimatePresence>
               {toasts.map((toast) => {
                 const Icon = ICONS[toast.type]

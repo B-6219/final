@@ -30,7 +30,7 @@ export function Skeleton({ className }) {
 export function VehicleCardSkeleton() {
   return (
     <div className="bg-graphite border border-graphite-light">
-      <Skeleton className="aspect-[4/3] w-full" />
+      <Skeleton className="aspect-4/3 w-full" />
       <div className="p-5 space-y-3">
         <Skeleton className="h-3 w-1/3" />
         <Skeleton className="h-5 w-2/3" />
